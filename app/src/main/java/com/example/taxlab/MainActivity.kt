@@ -2,27 +2,43 @@ package com.example.taxlab
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+
 //import androidx.compose.ui.semantics.text
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , View.OnClickListener {
+
+    lateinit var income: EditText
+    lateinit var result: TextView
+    lateinit var taxTextView: TextView
+    lateinit var calc: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // Set the layout file
 
-        val grossIncome = 1500000
+        income = findViewById(R.id.et_income)
+        result = findViewById(R.id.result_tv)
+        taxTextView = findViewById(R.id.tv_tax)
+        calc = findViewById(R.id.btn_tax)
+        calc.setOnClickListener(this)
+    }
 
-        val tax = taxCalc(grossIncome)
+    override fun onClick(v: View?) {
+        if (v?.id == R.id.btn_tax) { // Check if the clicked view is the button
+            val monthlyIncome = income.text.toString().toIntOrNull() ?: 0
+            val annualIncome = monthlyIncome * 12 - 75000 // Calculate annual income after standard deduction
+            val calculatedTax = taxCalc(annualIncome)
+            val netIncome = annualIncome - calculatedTax
 
-        Log.d("TaxCalculator", "Calculated Tax: $tax & Net Income: ${grossIncome - tax}")
-
-        // Find the TextView in the layout
-        val resultTextView = findViewById<TextView>(R.id.resultText)
-
-        // Update the TextView with the calculated tax
-        resultTextView.text = "Calculated Tax: $tax"
+            result.text = "Net Income: $netIncome" // Corrected variable name
+            taxTextView.text = "Tax: $calculatedTax" // Display tax
+        }
     }
 
     fun taxCalc(grossIncome: Int): Float {
@@ -64,4 +80,6 @@ class MainActivity : AppCompatActivity() {
         }
         return tax
     }
+
+
 }
