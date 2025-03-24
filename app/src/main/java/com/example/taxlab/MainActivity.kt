@@ -31,10 +31,9 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.btn_tax) { // Check if the clicked view is the button
-            val monthlyIncome = income.text.toString().toIntOrNull() ?: 0
-            val annualIncome = monthlyIncome * 12 // Calculate annual income after standard deduction
-            val calculatedTax = taxCalc(annualIncome-75000)
-            val netIncome = annualIncome - calculatedTax
+            val Income = income.text.toString().toIntOrNull() ?: 0
+            val calculatedTax = taxCalc(Income-75000)
+            val netIncome = Income - calculatedTax
 
             result.text = "Net Income: $netIncome" // Corrected variable name
             taxTextView.text = "Tax: $calculatedTax" // Display tax
